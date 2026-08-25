@@ -1,0 +1,39 @@
+--- artifacts/commercial-billing/src/App.tsx
++++ artifacts/commercial-billing/src/App.tsx
+@@ -497,7 +497,35 @@
+ 
+   const finalDiscount = Math.min(discountAmount, subtotal);
+-  const finalTotal = subtotal - finalDiscount;
++
++  const [taxEnabled, setTaxEnabled] = useState(false);
++  const [taxRate, setTaxRate] = useState(0);
++
++  useEffect(() => {
++    async function fetchTax() {
++      try {
++        const session = await auth.getSession();
++        if (!session?.user) return;
++        let bid = await getBusinessId();
++        if (!bid) {
++          const profiles = await db.list<Row>('profiles', { id: session.user.id });
++          if (profiles.length > 0) bid = profiles[0].business_id;
++        }
++        if (bid) {
++          const settingsList = await db.list<Row>('settings', { business_id: bid });
++          if (settingsList.length > 0) {
++            setTaxEnabled(Boolean(settingsList[0].enable_tax));
++            setTaxRate(Number(settingsList[0].tax_rate) || 0);
++            return;
++          }
++        }
++      } catch (e) {
++        console.warn('Could not load tax settings:', e);
++      }
++    }
++    fetchTax();
++  }, []);
++
++  const taxAmount = taxEnabled ? (subtotal - finalDiscount) * (taxRate / 100) : 0;
++  const finalTotal = subtotal - finalDiscount + taxAmount;
+ 
+   const addItem = (product: Row) => setItems((old) => old.some((i) => i.product_id === product.id) ? old.map((i) => i.product_id === product.id ? { ...i, quantity: Number(i.quantity || 1) + 1 } : i) : [...old, { product_id: product.id, name: product.name, price: product.price, quantity: 1, unit: product.unit }]);

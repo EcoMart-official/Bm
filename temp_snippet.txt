@@ -1,0 +1,15 @@
+  const discountAmount = useMemo(() => {
+    const val = Number(discountValue) || 0;
+    if (discountType === 'percentage') {
+      return subtotal * (val / 100);
+    }
+    return val;
+  }, [discountValue, discountType, subtotal]);
+  
+  const finalDiscount = Math.min(discountAmount, subtotal);
+  const finalTotal = subtotal - finalDiscount;
+  const addItem = (product: Row) => setItems((old) => old.some((i) => i.product_id === product.id) ? old.map((i) => i.product_id === product.id ? { ...i, quantity: Number(i.quantity || 1) + 1 } : i) : [...old, { product_id: product.id, name: product.name, price: product.price, quantity: 1, unit: product.unit }]);
+  
+  const [customerModal, setCustomerModal] = useState(false);
+  const [newCustomerForm, setNewCustomerForm] = useState<Row>({});
+

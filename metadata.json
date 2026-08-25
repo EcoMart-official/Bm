@@ -1,0 +1,6 @@
+{
+  "name": "ARVENTA VENTURES LMS",
+  "description": "Private Lead & Commercial Billing Management System for Arventa Ventures",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

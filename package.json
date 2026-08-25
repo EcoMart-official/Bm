@@ -1,0 +1,28 @@
+{
+  "name": "workspace",
+  "version": "0.0.0",
+  "license": "MIT",
+  "workspaces": [
+    "artifacts/*",
+    "lib/*",
+    "scripts"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=artifacts/commercial-billing",
+    "build": "npm run typecheck && npm run build --workspaces --if-present",
+    "typecheck:libs": "tsc --build",
+    "typecheck": "npm run typecheck:libs && npm run typecheck --workspace=artifacts/* --workspace=scripts --if-present"
+  },
+  "private": true,
+  "dependencies": {
+    "@replit/connectors-sdk": "^0.4.1",
+    "dom-to-image": "^2.6.0",
+    "html5-qrcode": "^2.3.8",
+    "jspdf": "^4.2.1"
+  },
+  "devDependencies": {
+    "@types/dom-to-image": "^2.6.7",
+    "prettier": "^3.9.6",
+    "typescript": "~5.9.3"
+  }
+}

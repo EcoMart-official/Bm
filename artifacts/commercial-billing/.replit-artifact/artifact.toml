@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Commercial Billing"
+description = "A professional, mobile-first billing and inventory workspace for small businesses to manage customers, products, invoices, payments, stock, expenses, and reports with Supabase-backed data and secure business isolation."
+version = "1.0.0"
+id = "artifacts/commercial-billing"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 20499
+
+[services.development]
+run = "pnpm --filter @workspace/commercial-billing run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/commercial-billing", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/commercial-billing/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20499"
+BASE_PATH = "/"
